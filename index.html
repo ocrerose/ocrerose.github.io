@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
+  <title>L'univers Bonnes Ondes</title>
+</head>
+<body>
+  <header>Bonnes Ondes, magasin d'instruments acoustiques référent dans le paysage musical depuis 1910. <br>Produits répondant aux critères éligibles aux financements en soutien aux créateurs, dont le <abbr title="Fonds pour la Création musicale">FCM</abbr> et le <abbr title="Fonds Régional pour les Talents Emergents">FoRTE</abbr>
+  </header>
+  <h1><em>L'univers Bonnes Ondes</em></h1>
+  <P>
+    <img src="https://cdn.pixabay.com/photo/2020/05/01/14/15/music-sheet-5117328_1280.jpg" width="200" height="160" title="Ombres sur partitions" alt="Ombres sur partition">
+  </P>
+  <nav>
+    <h3>Notre catalogue</h3>
+    <ul>
+      <li><a href="#Instrument">Instruments</a></li>
+      <li><a href="#cordes">Guitares et cordes</a></li>
+      <li><a href="#claviers">Pianos et claviers</a></li>
+      <li><a href="#Percussions">Percussions</a></li>
+      <li><a href="#vent">Instruments à vent</a></li>
+      <li><a href="#Accessoires">Accessoires</a></li>
+      <li><a href="#Partitions">Partitions et méthodes</a></li>
+      <li><a href="#Actualité">Actualité</a></li>
+    </ul>
+  </nav>
+  <nav>
+  <?php
+// ===== affichage des erreurs (pratique pour apprendre) =====
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// ===== connexion base de données =====
+$host = 'localhost';
+$user = 'root';
+$pass = 'root';    // adapte si besoin
+$db   = 'instrument';   // adapte si besoin
+
+$conn = new mysqli($host, $user, $pass, $db);
+
+if ($conn->connect_error) {
+    die("Erreur MySQL : " . $conn->connect_error);
+}
+
+// ===== 1. récupérer la liste de tous les produits =====
+$sqlListe = "SELECT id, nom FROM produit ORDER BY nom ASC";
+$resultListe = $conn->query($sqlListe);
+
+if (!$resultListe) {
+    die("Erreur SQL (liste) : " . $conn->error);
+}
+$produits = $resultListe->fetch_all(MYSQLI_ASSOC);
+
+// ===== 2. si un id est passé dans l'URL, on va chercher ce produit =====
+$produitSelectionne = null;
+
+if (isset($_GET['id']) && ctype_digit($_GET['id'])) {
+    $id = (int) $_GET['id'];
+
+    $sqlProd = "SELECT * FROM produit WHERE id = $id";
+    $resultProd = $conn->query($sqlProd);
+    if ($resultProd && $resultProd->num_rows === 1) {
+        $produitSelectionne = $resultProd->fetch_assoc();
+    }
+}
+
+$conn->close();
+?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>choix d’un produit</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            background: #f5f5f7;
+            margin: 0;
+            padding: 40px 20px;
+            color: #222;
+        }
+
+        .page {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            margin-bottom: 24px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        select {
+            padding: 6px 10px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            min-width: 260px;
+        }
+
+        button {
+            padding: 6px 14px;
+            font-size: 0.95rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            background: #2563eb;
+            color: #fff;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            padding: 20px 24px;
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #888;
+            margin-bottom: 6px;
+        }
+
+        .title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #444;
+            margin-bottom: 16px;
+        }
+
+        .specs {
+            background: #fafafa;
+            border-radius: 12px;
+            border: 1px solid #e3e3e3;
+            padding: 12px 14px;
+            font-size: 0.9rem;
+        }
+
+        .specs div {
+            margin-bottom: 6px;
+        }
+
+        .specs span {
+            font-weight: 600;
+        }
+
+        .empty {
+            text-align: center;
+            color: #666;
+            font-size: 0.95rem;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <h1>choisir un produit</h1>
+
+    <!-- formulaire avec liste déroulante -->
+    <form method="get" action="">
+        <label for="id">produit :</label>
+        <select name="id" id="id">
+            <option value="">-- sélectionner un produit --</option>
+            <?php foreach ($produits as $p): ?>
+                <option value="<?php echo $p['id']; ?>"
+                    <?php if (isset($id) && $id == $p['id']) echo 'selected'; ?>>
+                    <?php echo htmlspecialchars($p['nom']); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <button type="submit">afficher la fiche</button>
+    </form>
+
+    <!-- fiche du produit sélectionné -->
+    <?php if ($produitSelectionne): ?>
+        <div class="card">
+            <div class="subtitle">fiche produit</div>
+            <div class="title">
+                <?php echo htmlspecialchars($produitSelectionne['nom']); ?>
+            </div>
+			<div class="référence au catalogue">
+                <?php echo htmlspecialchars($produitSelectionne['num']); ?>
+            </div>
+            <div class="description">
+                <?php echo nl2br(htmlspecialchars($produitSelectionne['description'])); ?>
+            </div>
+            <div class="specs">
+                <div><span>Matière :</span>
+                    <?php echo htmlspecialchars($produitSelectionne['matiere']); ?>
+                </div>
+                <div><span>Dimensions :</span>
+                    <?php echo $produitSelectionne['longueur_cm']; ?> ×
+                    <?php echo $produitSelectionne['largeur_cm']; ?> cm
+                </div>
+                <div><span>Poids :</span>
+                    <?php echo htmlspecialchars($produitSelectionne['poids_kg']); ?> kg	
+                </div>
+				<div class="prix">
+                <div><span>Prix:</span>
+                    <?php echo htmlspecialchars($produitSelectionne['prix']); ?> €	
+                </div>				
+            </div>
+        </div>
+    <?php else: ?>
+        <div class="empty">
+            choisis un produit dans la liste pour afficher sa fiche.
+        </div>
+    <?php endif; ?>
+</div>
+</nav>
+  <section id="Instrument">
+    <h3>Instruments</h3>
+  </section>
+  <section id="cordes">
+    <h4>Guitares et cordes</h4>
+    <article>
+      <h5>Guitare classique</h5>
+      <p>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Classical_Guitar_two_views.jpg" width="132" height="231" alt="Guitare classique. Par Martin Möller. CC BY-SA 2.0" title="Guitare classique. Par Martin Möller. CC BY-SA 2.0">
+      <P><a href="https://fr.wikipedia.org/wiki/Guitare_classique" title="documentation Wikipédia">Documentation wikipédia</a></p>
+    <h6>Fiche produit</h6>
+      <p>
+        Table épicéa stratifiée. Dos et éclisses en tilleul. Manche en acajou. Touche en composite. <br>Longueur d'échelle de 585 mm. Largeur de sillet de 44 mm. <br>Finition naturelle. <br>Prix : 150,00 €<br>Tout niveau. Adapté aux débutants. <br>Ne pas négliger le choix des cordes selon le son recherché. Les cordes en nylon produiront un son plus chaud.</p>
+    </article>
+    <article>
+      <h5>Gadoulka</h5>
+      <p>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/58/Gdulka-bow_copy.jpg" width="132" height="185" alt="Gadoulka par Frink5, CC BY-SA 3.0" title="Gadoulka par Frink5, CC BY-SA 3.0">
+      </p>
+       <p><a href="https://fr.wikipedia.org/wiki/Gadoulka" title="Gadoulka">Documentation wikipédia</a></p>
+      <h6>Fiche produit</h6>
+      <p>Violon balkanique fait main. <br>Instrument folklorique orchestral. <br>Prix : 3 500 €</p>
+    </article>
+    <article>
+      <h5>Violon</h5>
+      <p>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f6/Old_violin.jpg" width="132" height="185" alt="Violon par Frink5,CC BY-SA 3.0" title="Violon par Frink5,CC BY-SA 3.0">
+      </p>
+      <p><a href="https://fr.wikipedia.org/wiki/Violon" title="Violon">Documentation wikipédia</a></p>
+      <h6> Fiche produit.</h6>
+      <p>Taille: 4/4. Bois de résonance européens soigneusement sélectionnés à la main. Cordes Larsen Aurora. Mentonnière en ébène. <br>Prix : 3 500 €.<br>Pour les virtuoses</p>
+    </article>
+  </section>
+
+  <section id="claviers">
+    <h4>Pianos et claviers</h4>
+    <article>
+      <h5>Piano droit</h5>
+      <p>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/56/Pianodroit.jpg" width="132" height="133" alt="Piano droit" title="Piano droit">
+      <p><a href="https://fr.wikipedia.org/wiki/Piano_droit" title="documentation">Documentation Wikipédia</a></p>
+      <h6>Fiche produit</h6>
+      <p> 88 touches, clavier marteaux, surface en ivoire.<br>Prix : 3 000 € </p>
+      <p><a href="https://fr.wikipedia.org/wiki/Piano#Entretien_et_réglages" title="Conseils">Conseils pour l'entretien et les réglages des pianos.</a></p>
+    </article>
+
+    <article>
+      <h5>Accordéon diatonique</h5>
+      <p>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/52/Accord%C3%A9on_diatonique_B.Loffet_Graet_e_Breizh_2_rangs_3_voix.jpg" width="183" height="132" alt="Accordéon diatonique. Par Bernard Loffet. CC BY-SA 3.0. " title="Accordéon diatonique.">
+      </p>
+      <p><a href="https://fr.wikipedia.org/wiki/Accord%C3%A9on_diatonique" title="Accordéon diatonique">Documentation wikipédia.</a></p>
+      <h6>Fiche produit</h6>
+      <p>Modèle en bois massif (Noyer, cerisier ou érable). 2 rangées diatoniques à 3 voix, 8 basses. Le registre permet de changer la sonorité en ouvrant ou occultant le troisième jeu d'anches grave ("basson").<br>Inclus : bretelles et étui.<br>Prix 1 098 € </p>
+    </article>
+  </section>
+
+  <section id="Percussions">
+    <h4>Percussions</h4>
+    <article>
+      <h5>Batterie acoustique</h5>
+      <p>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/2006-07-06_drum_set.jpg/800px-2006-07-06_drum_set.jpg" width="133" height="142" alt="Set de batterie acoustique par Stephan Czuratis. Travail personnel CC BY-SA 2.5." title="Set de batterie acoustique par Stephan Czuratis.CC BY-SA 2.5.">
+      </p>
+      <p><a href=https//fr.wikipedia.org/wiki/Batterie_(ensemble_musical) title="Documentation wikipédia">Documentation wikipédia</a></p>
+      <h6>Fiche produit</h6>
+      <p>Set de batterrie acoustique. Grande caisse, charleston, caisses claires, toms et cymbales.<br>Prix : 2 150,00 €</p>
+    </article>
+  </section>
+
+  <section id="vent">
+    <h4>Instruments à vent</h4>
+    <article>
+      <h5>Saxophone baryton</h5>
+      <p>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Baritone_saxophone.jpg" width="122" height="221" alt="Saxophone baryton" title="Saxophone baryton">
+      </p>
+      <p><a href="https://fr.wikipedia.org/wiki/Saxophone_baryton" title="Saxophone baryton">Fiche Wikipédia </a></p>
+      <h6>Fiche produit</h6>
+      <p> Tonalité : Mib Descendant jusqu’au La grave Support pouce main droite réglable en résine Tampons cuir, résonateur métal Clé de Fa# aigu Ressorts aiguille en acier inox.<br>Prix : 12 500 € </p>
+    </article>
+    <article>
+      <h5>Flûte baroque</h5>
+      <p>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Yamaha_Soprano_Recorder_YRS-61.tif/lossy-page1-214px-Yamaha_Soprano_Recorder_YRS-61.tif.jpg" width="25" height="194" alt="Flûte baroque" title="Flûte baroque
+soprano. Corporation Yamaha. CC BY-SA 4">
+<p><a href="https://fr.wikipedia.org/wiki/Fl%C3%BBte_en_sol" title="Flûte alto">Documentation Wikipédia</a></p>
+      <h6>Fiche produit</h6>
+      <p>Flûte à bec Soprano professionnelle en bois d'érable, clé C, 3 pièces, de Style Baroque avec étui rigide. <br>Ton agréable et doux.<br> Prix : 20,00 €.</p>
+    </article>
+    <article>
+      <h5>Flûte traversière</h5>
+      <p>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/Alto_flute_006.jpg" width="200" height="132" alt="Flûte traversière" title="Flûte traversière">
+      </p>
+      <p><a href="https://fr.wikipedia.org/wiki/Fl%C3%BBte_en_sol" title="Flûte traversière">Documentation wikipédia</a></p>
+      <h6>Fiche produit</h6>
+      <p> Flûte Alto en Sol, tête courbe, en cuivre rose, plaque d'embouchure en argent massif. <br>Livré avec : Etui, bandoulière, Écouvillon.<br>Prix : 1 340,00 €.<br>Son chaleureux.</p>
+    </article>
+    <article>
+      <h5>Clarinette </h5>
+      <p>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Leitner%2BKraus_410_320.png" width="120" height="231" alt="Clarinette bohème Leitner & Kraus GmbH, Neustadt/Aisch, Editor/Bearbeiter User:Gisbert K, CC BY-SA 4.0. " title="Clarinette bohème Leitner & Kraus. Editor/Bearbeiter. CC BY-SA 4.0.">
+      </p>
+      <p><a href="https://fr.wikipedia.org/wiki/Clarinette">Documentation wikipédia</a></p>
+      <h6>Fiche produit</h6>
+      <p> Style bohème. Quatres clés. Accessoires inclus : ligature, écouvillon, sèche-tampons, protège-becs.<br>Prix : 289,00 €<br>Parfait pour les débutants </p>
+    </article>
+  </section>
+  <section id="Accessoires">
+    <h3>Accessoires</h3>
+    <h5>outils et accessoires pour luthier</h5>
+    <p><a href="https://fr.wikipedia.org/wiki/Violon#Lutherie" title="Un article Wikipédia">Un article Wikipédia. Les caractéristiques de la lutherie.</a></p>
+      <h6>Les produits</h6>
+      <ul>
+      <li>Cale à radius 10" et 12". Prix : 30,00 €.</li>
+      <li>Set de 3 limes à sillet. Prix: 25,00 €.</li>
+      <li>Pince coupante pour frettes. Prix : 30,00 € </li>
+      <li>Jauge de radius ajourée. Prix : 18,00 € </li>
+    </ul>.
+    <h5>Accessoires pour piano</h5>
+    <h6>Les produits</h6>
+    <ul>
+      <li>Métronome mécanique. Prix : 25,00 €</li>
+      <li>Pédale de sustain universelle. Prix : 30,00 €</li>
+      <li>housse de protéction pour piano droit. Prix : 300,00€ </li>
+    </ul>
+  </section>
+  <aside id="Partitions">
+    <h3>Partitions et méthodes</h3>
+    <div class="csl-bib-body" style="line-height: 2; margin-left: 2em; text-indent:-2em;">
+      <div class="csl-entry">
+        AUTHELAIN, G. (2003). <i>A l’école, on fait musique</i> (Editions Van de Velde). <a href="https://librairiemusicaledefrance.com/30373-a-l-ecole-on-fait-musique-9782858683666.html">https://librairiemusicaledefrance.com/30373-a-l-ecole-on-fait-musique-9782858683666.html</a>
+      </div>
+      <span class="Z3988" title="url_ver=Z39.88-2004&amp;ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fzotero.org%3A2&amp;rft_id=urn%3Aisbn%3A978-2-85868-366-6&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=A%20l'%C3%A9cole%2C%20on%20fait%20musique&amp;rft.edition=Editions%20Van%20de%20Velde&amp;rft.aufirst=G%C3%A9rard&amp;rft.aulast=AUTHELAIN&amp;rft.au=G%C3%A9rard%20AUTHELAIN&amp;rft.date=2003-12-09&amp;rft.tpages=314&amp;rft.isbn=978-2-85868-366-6&amp;rft.language=fr"></span>
+      <div class="csl-entry">BOULEZ, P., ChANGEUX, J.-P., &amp; MANOURY, P. (s.&nbsp;d.). <i>Les neurones enchantés : Le cerveau et la musique</i> (Editions Odile Jacob). <a href="https://www.laflutedepan.com/livre/50022449/boulez-jean-pierre-changeux-philippe-manoury-pierre-les-neurones-enchantes-:-le-cerveau-et-la-musique-poches-odile-jacob-sciences-humaines.html">https://www.laflutedepan.com/livre/50022449/boulez-jean-pierre-changeux-philippe-manoury-pierre-les-neurones-enchantes-:-le-cerveau-et-la-musique-poches-odile-jacob-sciences-humaines.html</a></div>
+      <span class="Z3988" title="url_ver=Z39.88-2004&amp;ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fzotero.org%3A2&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Les%20neurones%20enchant%C3%A9s%20%3A%20le%20cerveau%20et%20la%20musique&amp;rft.edition=Editions%20Odile%20Jacob&amp;rft.series=Poches&amp;rft.aufirst=Pierre&amp;rft.aulast=BOULEZ&amp;rft.au=Pierre%20BOULEZ&amp;rft.au=Jean-Pierre%20ChANGEUX&amp;rft.au=Philippe%20MANOURY&amp;rft.language=fr-fr"></span>
+      <div class="csl-entry">MAALOUF, I. (s.&nbsp;d.). <i>Petite philosophie de l’improvisation</i> (Editions Equateurs). <a href="https://www.laflutedepan.com/livre/50020762/ibrahim-maalouf-petite-philosophie-de-l-improvisation-.html">https://www.laflutedepan.com/livre/50020762/ibrahim-maalouf-petite-philosophie-de-l-improvisation-.html</a></div>
+      <span class="Z3988" title="url_ver=Z39.88-2004&amp;ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fzotero.org%3A2&amp;rft_id=urn%3Aisbn%3A978-2-38284-196-9&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Petite%20philosophie%20de%20l'improvisation&amp;rft.edition=Editions%20Equateurs&amp;rft.aufirst=Ibrahim&amp;rft.aulast=MAALOUF&amp;rft.au=Ibrahim%20MAALOUF&amp;rft.isbn=978-2-38284-196-9&amp;rft.language=fr-fr"></span>
+      <div class="csl-entry">ROLLAND, P. (avec MUTSCHLER, M., &amp; HELLEBRANDT, Frances. A.). (s.&nbsp;d.). <i>L’enseignement du mouvement dans le jeu des cordes—Techniques formatives et correctives pour le violon et l’alto.</i> (Presses de L’Université&nbsp; de Laval (PUL), Vol. 1). <a href="https://www.laflutedepan.com/livre/5001527/paul-rolland-l-enseignement-du-mouvement-dans-le-jeu-des-cordes-.html">https://www.laflutedepan.com/livre/5001527/paul-rolland-l-enseignement-du-mouvement-dans-le-jeu-des-cordes-.html</a></div>
+      <span class="Z3988" title="url_ver=Z39.88-2004&amp;ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fzotero.org%3A2&amp;rft_id=urn%3Aisbn%3A978-2-7637-7171-7&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=L'enseignement%20du%20mouvement%20dans%20le%20jeu%20des%20cordes%20-%20Techniques%20formatives%20et%20correctives%20pour%20le%20violon%20et%20l'alto.&amp;rft.edition=Presses%20de%20L'Universit%C3%A9%20%20de%20Laval%20(PUL)&amp;rft.aufirst=Paul&amp;rft.aulast=ROLLAND&amp;rft.au=Paul%20ROLLAND&amp;rft.au=Maria%20MUTSCHLER&amp;rft.au=Frances.A%20HELLEBRANDT&amp;rft.tpages=247&amp;rft.isbn=978-2-7637-7171-7&amp;rft.language=fr-fr"></span>
+      <div class="csl-entry">SAUGUET, H., DRUON, M., &amp; TARDIEU, J.-L. (s.&nbsp;d.). <i>Tistou les pouces verts—Partition chant et piano</i> (Editions Billaudot). <a href="https://www.lekiosqueamusique.com/pour-enfants/8170-tistou-les-pouces-verts-piano-et-chant-9790043080268.html">https://www.lekiosqueamusique.com/pour-enfants/8170-tistou-les-pouces-verts-piano-et-chant-9790043080268.html</a></div>
+      <span class="Z3988" title="url_ver=Z39.88-2004&amp;ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fzotero.org%3A2&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Tistou%20les%20pouces%20verts%20-%20Partition%20chant%20et%20piano&amp;rft.edition=Editions%20Billaudot&amp;rft.aufirst=Henri&amp;rft.aulast=SAUGUET&amp;rft.au=Henri%20SAUGUET&amp;rft.au=Maurice%20DRUON&amp;rft.au=Jean-Luc%20TARDIEU&amp;rft.language=fr"></span>
+    </div>
+  </aside>
+  <aside id="Actualité"><h3>Actualité</h3>
+    <h4>Concerts et manifestations culturelles partenaires</h4>
+   <p><a href="https://www.welcome-in-tziganie.com/" title="Festival de musique Tsigane">Festival de musique Tsigane du 24 au 26 avril 2026.</a><br
+   <p><a href="https://www.radiofrance.fr/francemusique/podcasts/serie-la-musique-baroque-anthologie" title="Anthologie de la musique baroque">Anthologie de la musique baroque. Série produite par France Musique.</a></p>
+  </aside>
+  <footer>
+    <p>Nous contacter : <a href="mailto:bonnesondes@gmail.com">bonnesondes@bonnes-ondes.fr</a></p>
+  </footer>
+</body>
+</html>

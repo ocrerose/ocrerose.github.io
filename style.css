@@ -1,0 +1,116 @@
+a {
+  color: #660033;
+  font-weight: bold;
+  padding: 20px;
+}
+
+body {
+  body {
+background-color: ligth blue;
+font-family: verdana; 
+font-size: 14px; 
+line-height: 1.5;
+margin-top: 10px;
+}
+P {
+  padding: 20px;
+}
+nav {
+  background-color: rgb(240, 233, 222);
+  font-family: verdana;
+  font-size: 14px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
+section {
+  background-color: #ffffe6;
+  font-family: verdana;
+  margin-top: 0px;
+  margin-left: 30px;
+  margin-right: 30px;
+}
+header {
+  background-color: #ffffe1;
+  font-family: verdana;
+  margin-top: 40px;
+  color: #660033;
+}
+
+aside {
+  background-color: rgb(240, 233, 222);
+  font-family: verdana;
+  margin-top: 40px;
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 30px;
+  line-height: 0px;
+  margin-bottom: 0px;
+  margin-top: 0
+  padding: 20px;
+}
+
+h2 {
+  font-size: 25px;
+  line-height: 0;
+  margin-bottom: 0px;
+  text-align: left;
+  margin-left: 20px;
+  margin-top: 0px;
+  padding: 20px;
+}
+
+h3 {
+  font-size: 25px;
+  line-height: 0;
+  margin-bottom: 0px;
+  text-align: left;
+  color: #660033;
+  margin-top: 0px;
+  padding: 20px;
+}
+
+h4 {
+  font-size: 20px;
+  margin-bottom: 0px;
+  text-align: left;
+  margin-top: 0px;
+  padding: 20px;
+}
+
+h5 {
+  font-size: 16px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  text-align: left;
+  padding: 20px;
+}
+
+h6 {
+  font-size: 14px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  color: #660033;
+  text-align: left;
+  padding: 20px;
+}
+
+p {
+  color: black;
+  text-align: left;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+: marker {
+  color: #660033;
+  font-size: 0px;
+}
+.Z3988 {
+  display: none;
+}
