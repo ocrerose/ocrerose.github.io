@@ -1,132 +1,176 @@
 a {
-  color: #660033;
+  color: rgb(86, 0, 59);
   font-weight: bold;
   padding: 0px;
 }
-
-body {
-  background-color:#ffffe1;
-  font-family: verdana;
-  font-size: 14px;
-  line-height: 1.5;
-  margin-top: 20px;
-  margin-left: 40px;
-  margin-right: 40px;
+em {
+  color: black;
+  font-weight: bold;
+  padding: 0px;
 }
 P {
   padding: 40px;
   margin-top: -10px;
-  margin-bottom:-10px;
+  margin-bottom: -10px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+article {
+  display: flex;
+  align-items: flex-start;
+  gap: px;
+  max-width: 700px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-right: 0px;
+  margin-left: 15px;
+}
+article img {
+  float: flex;
+  max-width: 150px;
+  margin-right: -20px;
+  margin-left: px;
+}
+article div.contenu {
+  flex: 1;
+}
+article h5,
+article h6,
+article p,
+article a {
+  margin: -15px;
+}
+body {
+  font-family: verdana;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-top: -90px;
+  margin-bottom: -100px;
   margin-left: 40px;
-  margin-right: 50px;
+  margin-right: 40px;
+  background-color: #ffffe1;
+}
+header {
+  background-color: rgb(47, 6, 35);
+  padding: 35px;
+  font-family: verdana;
+  font-size: 14px;
+  margin-top: 90px;
+  margin-bottom: 0px;
+  text-align: center;
+  line-height: 2;
+  color:rgb(227, 189, 51);
+  margin-left: -100px;
+  margin-right: -100px;
 }
 nav {
   background-color: rgb(240, 233, 222);
   font-family: verdana;
   font-size: 14px;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  margin-left: 30px;
-  margin-right: 30px;
+  line-height: 2;
+  margin-top: 10px;
+  margin-bottom: 40px;
+  margin-left: 40px;
+  margin-right: 40px;
 }
 section {
   background-color: rgb(240, 233, 222);
   font-family: verdana;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  margin-left: 30px;
-  margin-right: 30px;
-}
-header {
-  background-color: #ffffe1;
-  font-family: verdana;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  text-align: center;
-  line-height: 2;
-  color: #660033;
-}
-aside {
-  background-color: rgb(241, 233, 222);
-  font-family: verdana;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  margin-left: 30px;
-  margin-right: 30px;
-}
-h1 {
-  text-align: center;
-  font-size: 30px;
-  line-height: 0px;
-  margin-bottom: 12px;
-  margin-top: 0px;
-  padding: 20px;
-  margin-top: 0px;
+  font-size: 14px;
+  margin-top: 10px;
+  margin-bottom: 40px;
   margin-left: 40px;
   margin-right: 40px;
 }
+aside {
+  background-color: rgb(240, 233, 222);
+  font-family: verdana;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+footer {
+  background-color: #471b21;
+  font-family: verdana;
+  margin-top: 100px;
+  margin-bottom: 30px;
+  text-align: center;
+  line-height: 2;
+  color: rgb(227, 189, 51);
+  margin-left: -100px;
+  margin-right: -100px;
+}
+h1 {
+  color: rgb(47, 6, 35);
+  text-align: center;
+  font-size: 30px;
+  line-height: 0px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  padding: 20px;
+  margin-top: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+}
 h2 {
   font-size: 25px;
-  line-height: 0;
-  margin-bottom:0;
+  color: rgb(47, 6, 35);
+  line-height: 0px;
+  margin-bottom: 0px;
   text-align: left;
-  margin-left: 20px;
+  margin-left: 0px;
   padding: 20px;
 }
-
 h3 {
   font-size: 25px;
   line-height: 1.5;
-  margin-bottom:3px;
+  margin-bottom: 0px;
+  margin-left: 0px;
   text-align: left;
-  color: #660033;
+  color: rgb(47, 6, 35);
   margin-top: 0px;
   padding: 20px;
 }
-
 h4 {
   font-size: 20px;
- line-height: 1,5;
-  margin-bottom: -20px;
+  line-height: 1.5;
+  margin-bottom: 0px;
+  margin-left: 0px;
   text-align: left;
-  color: black;
-  margin-top: -20px;
+  color: rgb(47, 6, 35);
+  margin-top: 0px;
   padding: 20px;
 }
 h5 {
   font-size: 16px;
-  line-height: 1,5;
-  margin-bottom: -30px;
+  line-height: 1.5;
+  margin-bottom: 0px;
   text-align: left;
   color: black;
-  margin-top: -30px;
+  margin-top: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
   padding: 20px;
 }
 h6 {
   font-size: 14px;
   line-height: 1.5;
   margin-bottom: 0px;
+  margin-left: 0px;
   text-align: left;
   color: #660033;
   margin-top: 0px;
   padding: 20px;
 }
-
-p {
+marker {
   color: black;
-  text-align: left;
-  margin-top: -40px;
-  margin-bottom: -40px;
+  font-size: 6px;
 }
-: marker {
-  color: #660033;
-  font-size: 0px;
-}
-ul { 
-margin-top:5px; 
-margin-bottom:0px; 
+ul {
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 .Z3988 {
   display: none;
 }
-
