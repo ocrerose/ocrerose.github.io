@@ -1,5 +1,5 @@
 a {
-  color: rgb(86, 0, 59);
+  color: #5a6521;
   font-weight: bold;
   padding: 0px;
 }
@@ -9,9 +9,9 @@ em {
   padding: 0px;
 }
 P {
-  padding: 40px;
-  margin-top: -10px;
-  margin-bottom: -10px;
+  padding: px;
+  margin-top: px;
+  margin-bottom:px;
   margin-left: 20px;
   margin-right: 20px;
 }
@@ -23,19 +23,27 @@ ul {
   margin-right: 20px;
 }
 article {
-  display: flex;
-  gap: 20px;
-  max-width: 700px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  margin-right: 0px;
-  margin-left: 15px;
+padding-top: 30px;
+padding-right: 30px;
+padding-bottom:30px;
+padding-left:30px;
+display: flex;
+gap:60px;
+max-width: 700px;
+margin-top: 30px;
+margin-bottom: 30px;
+margin-right: 0px;
+margin-left: 15px;
 }
 article img {
-  float: flex;
-  max-width: 250px;
-  margin-right: px;
-  margin-left: px;
+padding-top: 0px;
+padding-right: 0px;
+padding-bottom: 0px;
+padding-left: 0px;
+float: flex;
+max-width: 250px;
+margin-right: 10px;
+margin-left: 0px;
 }
 article div.contenu {
   flex: 1;
@@ -58,7 +66,10 @@ body {
 }
 header {
   background-color: #471b21;
-  padding: 35px;
+  padding-top: 30px;
+  padding-right: 30px;
+  padding-bottom:30px;
+  padding-left:30px;
   font-family: verdana;
   font-size: 14px;
   margin-top: 90px;
@@ -83,14 +94,22 @@ section {
   background-color: rgb(240, 233, 222);
   font-family: verdana;
   font-size: 14px;
-  margin-top: 10px;
-  margin-bottom: 40px;
+  padding-top: 30px;
+  padding-right: 30px;
+  padding-bottom:30px;
+  padding-left:30px;
+  margin-top: 30px;
+  margin-bottom: 30px;
   margin-left: 40px;
   margin-right: 40px;
 }
 aside {
   background-color: rgb(240, 233, 222);
   font-family: verdana;
+  padding-top: 30px;
+  padding-right: 30px;
+  padding-bottom:30px;
+  padding-left:30px;
   margin-top: 20px;
   margin-bottom: 20px;
   margin-left: 40px;
